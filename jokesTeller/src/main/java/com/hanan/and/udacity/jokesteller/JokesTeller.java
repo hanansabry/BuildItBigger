@@ -2,6 +2,9 @@ package com.hanan.and.udacity.jokesteller;
 
 public class JokesTeller {
     public String getJoke() {
-        return "i'm going to tell u funny joke, stay tuned!";
+        return "A Bar Opened Opposite A Church!\n" +
+                "\n" +
+                "The Church Prayed Daily Against The Bar Business\n" +
+                "\n";
     }
 }
