@@ -2,9 +2,8 @@ package com.hanan.and.udacity.jokesteller;
 
 public class JokesTeller {
     public String getJoke() {
-        return "A Bar Opened Opposite A Church!\n" +
-                "\n" +
-                "The Church Prayed Daily Against The Bar Business\n" +
-                "\n";
+        return "Q. What is the biggest lie in the entire universe?" +
+                "\nA. I have read and agree to the Terms & Conditions.";
+//        return "";
     }
 }
