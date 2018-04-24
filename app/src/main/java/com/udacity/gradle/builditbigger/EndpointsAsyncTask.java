@@ -24,10 +24,19 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private MyApi myApiService = null;
     private Context context;
     private String loadedJoke;
-    public boolean testFlag = false;
+    boolean testFlag = false;
+    private EndPointIdlingResource mIdlingResource;
+
+    public EndpointsAsyncTask(EndPointIdlingResource idlingResource) {
+        mIdlingResource = idlingResource;
+    }
+
 
     @Override
     protected String doInBackground(Context... params) {
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(false);
+        }
         if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -57,22 +66,14 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String joke) {
-        if (testFlag) {
-            setJoke(joke);
-        } else {
-            Toast.makeText(context, joke, Toast.LENGTH_LONG).show();
-            //start the JokeDisplayActivity from the JokesDisplay Android Library
-            Intent intent = new Intent(context, JokeDisplayActivity.class);
-            intent.putExtra(JokeDisplayActivity.JOKE_KEY, joke);
-            context.startActivity(intent);
+        //start the JokeDisplayActivity from the JokesDisplay Android Library
+        Intent intent = new Intent(context, JokeDisplayActivity.class);
+        intent.putExtra(JokeDisplayActivity.JOKE_KEY, joke);
+        context.startActivity(intent);
+        if (mIdlingResource != null) {
+            mIdlingResource.setIdleState(true);
+            mIdlingResource.setJoke(joke);
         }
     }
 
-    public void setJoke(String joke) {
-        loadedJoke = joke;
-    }
-
-    public String getJoke() {
-        return loadedJoke;
-    }
 }

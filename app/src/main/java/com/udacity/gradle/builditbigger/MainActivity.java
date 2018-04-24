@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.Menu;
@@ -21,9 +24,12 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
+import javax.annotation.Nullable;
+
 
 public class MainActivity extends AppCompatActivity {
-    String loadedJoke;
+
+    @Nullable private EndPointIdlingResource mIdlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +62,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
         //get the joke from the AsyncTask
-        new EndpointsAsyncTask().execute(this);
+        new EndpointsAsyncTask(mIdlingResource).execute(this);
     }
 
+    /**
+     * Only called from test, creates and returns a new {@link EndPointIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new EndPointIdlingResource();
+        }
+        return mIdlingResource;
+    }
 }
