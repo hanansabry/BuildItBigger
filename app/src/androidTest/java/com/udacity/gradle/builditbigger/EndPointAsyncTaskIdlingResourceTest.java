@@ -43,7 +43,7 @@ public class EndPointAsyncTaskIdlingResourceTest {
     @Test
     public void jokeTextViewIsNotEmpty() {
         //click the tellJoke Button
-        Espresso.onView(ViewMatchers.withId(R.id.instructions_text_view)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.tell_joke)).perform(ViewActions.click());
 
         //check if the jokeTextView is not empty
         Espresso.onView(ViewMatchers.withId(R.id.joke_view))

@@ -27,7 +27,7 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.JokesListener {
 
     @Nullable private EndPointIdlingResource mIdlingResource;
 
@@ -62,7 +62,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
         //get the joke from the AsyncTask
-        new EndpointsAsyncTask(mIdlingResource).execute(this);
+        new EndpointsAsyncTask(mIdlingResource, this).execute(this);
+    }
+
+    @Override
+    public void displayJoke(String joke) {
+        Intent intent = new Intent(this, JokeDisplayActivity.class);
+        intent.putExtra(JokeDisplayActivity.JOKE_KEY, joke);
+        startActivity(intent);
     }
 
     /**

@@ -23,14 +23,17 @@ public //AsyncTask Class to retrieve the jokes from the endpoint api
 class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     private MyApi myApiService = null;
     private Context context;
-    private String loadedJoke;
-    boolean testFlag = false;
     private EndPointIdlingResource mIdlingResource;
+    private JokesListener mJokesListener;
 
-    public EndpointsAsyncTask(EndPointIdlingResource idlingResource) {
-        mIdlingResource = idlingResource;
+    public interface JokesListener{
+        public void displayJoke(String joke);
     }
 
+    public EndpointsAsyncTask(EndPointIdlingResource idlingResource, JokesListener jokesListener) {
+        mIdlingResource = idlingResource;
+        mJokesListener = jokesListener;
+    }
 
     @Override
     protected String doInBackground(Context... params) {
@@ -66,14 +69,10 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String joke) {
-        //start the JokeDisplayActivity from the JokesDisplay Android Library
-        Intent intent = new Intent(context, JokeDisplayActivity.class);
-        intent.putExtra(JokeDisplayActivity.JOKE_KEY, joke);
-        context.startActivity(intent);
+        mJokesListener.displayJoke(joke);
         if (mIdlingResource != null) {
             mIdlingResource.setIdleState(true);
             mIdlingResource.setJoke(joke);
         }
     }
-
 }
